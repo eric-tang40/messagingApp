@@ -3,7 +3,7 @@
 ## About
 This app is a direct messaging application. The frontend is handled entirely by JavaFX, while the backend and database operations are managed by Django. We use SQLite for our database. Our user model, `myUser`, extends the `User` class provided by `django.contrib.auth`.
 
-Setup Instructions
+## Setup Instructions
 
 1. Clone and Pull
    - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before pulling.
@@ -36,7 +36,21 @@ Setup Instructions
 
 7. Configure the JavaFX Application
    1. Navigate to **Run -> Edit Configurations**.
-   2.
+   2. Click on **+**. Add an **Application**.
+   3. Click on **Modify options**. Find 'Add VM options' and make sure it's toggled on.
+   4. Fill out the fields as such:
+      1. **Name**: "JavaFXApp"
+      2. **Run on**: Local Machine
+      3. **module not specified**: java 21 SDK of 'messagingApp'
+      4. **-cp <no module>**: messagingApp
+      5. **VM options**: `--module-path "pathtojavaFX/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics`
+      6. **Main class**: `java_files.mainGUI`
+   5. Do not modify any other fields. Click **Apply**, then **OK**.
+   6. Your JavaFX Application is set up!
+
+8. Run the Program
+   1. In the top right corner, select **JavaFXApp** instead of **Current File**.
+   2. Run it!
 
 ---
 
