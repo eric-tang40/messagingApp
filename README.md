@@ -9,7 +9,7 @@ Please make sure .gitignore exists in your project's root directory before makin
 ## Setup Instructions
 
 1. Clone and Pull
-   - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before pulling.
+   - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before re-cloning.
 
 2. Navigate to python_backend/
    - Run `cd python_backend/`
