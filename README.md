@@ -21,8 +21,8 @@ This app is a direct messaging application. The frontend is handled entirely by 
 
 5. Configure the Python Module
    1. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'python_backend' already exists. Click on it.
-   2. Navigate to **Dependencies**. Change the ==Module SDK== to your new virtual environment. Ensure that your new SDK is a Python environment.
-      1. Click on **Edit** saving the Module SDK. Make sure that the 'Python SDK home path:' matches the path of the virtual environment in your project.
+   2. Navigate to **Dependencies**. Change the <mark>Module SDK</mark> to your new virtual environment. Ensure that your new SDK is a Python environment.
+      1. Click on **Edit** saving the Module SDK. Make sure that the <mark>Python SDK home path:</mark> matches the path of the virtual environment in your project.
    3. Click **Apply**, then **OK**.
    4. Your Python module is set up!
 
@@ -43,7 +43,8 @@ This app is a direct messaging application. The frontend is handled entirely by 
       2. **Run on**: Local Machine
       3. **module not specified**: java 21 SDK of 'messagingApp'
       4. **-cp <no module>**: messagingApp
-      5. **VM options**: `--module-path "pathtojavaFX/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics`
+      5. **VM options**: `--module-path "path/to/your/javafx/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics`
+         - Note: replace <mark>"path/to/your/javafx/lib"</mark> with the complete path on your computer where you saved your javaFX `lib/` files.
       6. **Main class**: `java_files.mainGUI`
    5. Do not modify any other fields. Click **Apply**, then **OK**.
    6. Your JavaFX Application is set up!
