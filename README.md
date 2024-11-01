@@ -43,9 +43,9 @@ This app is a direct messaging application. The frontend is handled entirely by 
       2. **Run on**: Local Machine
       3. **module not specified**: java 21 SDK of 'messagingApp'
       4. **-cp <no module>**: messagingApp
-      5. **VM options**: `--module-path "path/to/your/javafx/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics`
+      5. **VM options**: --module-path "path/to/your/javafx/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics
          - Note: replace <mark>"path/to/your/javafx/lib"</mark> with the complete path on your computer where you saved your javaFX `lib/` files.
-      6. **Main class**: `java_files.mainGUI`
+      6. **Main class**: java_files.mainGUI
    5. Do not modify any other fields. Click **Apply**, then **OK**.
    6. Your JavaFX Application is set up!
 
