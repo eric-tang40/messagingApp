@@ -57,7 +57,7 @@ Clone this repository to your local machine.
 ### 8. Set Up JavaFX
 - Download the SDK (not jmods) version of JavaFX that is compatible with your computer.
 - Go to **File → Project Structure → Libraries → + → Java**.
-- Navigate to your newly downloaded JavaFX folder, similar to: `javafx-sdk-23.0.1/`.
+- Navigate to your newly downloaded JavaFX folder, path should look similar to: `javafx-sdk-23.0.1/`.
 - Inside the `lib/` folder, open all files that begin with "javafx" except for `javafx.properties`.
 - Add these files to the **messagingApp** module only (do NOT add them to the Python module).
 - Click **Apply**, then **OK**.
