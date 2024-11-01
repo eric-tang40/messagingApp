@@ -3,7 +3,8 @@
 ## About
 This app is a direct messaging application. The frontend is handled entirely by JavaFX, while the backend and database operations are managed by Django. We use SQLite for our database. Our user model, `myUser`, extends the `User` class provided by `django.contrib.auth`.
 
-**Note:** Please make sure to copy the `.gitignore` file into your local repository. It should be on the same level as `src/` and `python_backend/`. **Ensure this file exists before pushing changes to the main repository**, as it will prevent issues when others try to pull from the main.
+**Note:** Please make sure to copy the `.gitignore` file into your local repository. It should be on the same level as `src/` and `python_backend/`. 
+**Ensure this file exists before pushing changes to the main repository**, as it will prevent issues when others try to pull from the main.
 
 ## Note for VS Code users
 - VS Code users would mostly follows the Setup Instructions to step 7, after than that they will need another way to run the Java GUI.
