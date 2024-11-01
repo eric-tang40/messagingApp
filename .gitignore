@@ -1,0 +1,48 @@
+# Python
+*.pyc
+__pycache__/
+*.pyod
+*.pyd
+.Python
+env/
+venv/
+ENV/
+venv.bak/
+*.env
+
+# Django
+db.sqlite3
+*.log
+
+# IntelliJ IDEA
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# General
+.idea/
