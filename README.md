@@ -69,7 +69,7 @@ Clone this repository to your local machine.
 - Verify that `requirements.txt` in the `python_backend/` directory.
 - Run:
   ```
-  pip install -r requirements.txt
+  pip install -r python_backend/requirements.txt
   ```
 - Verify installation by running `pip list`. Ensure you have the following:
   - Django (version 5.1.2)
@@ -78,21 +78,23 @@ Clone this repository to your local machine.
 ### 6. Apply Database Migrations
 - Run the following commands to ensure migrations are applied:
   ```
-  python manage.py makemigrations
-  python manage.py migrate
+  python python_backend/manage.py makemigrations
+  python python_backend/manage.py migrate
   ```
 - After running these commands, you can proceed.
 
 ### 7. Run the Server
 - Run:
   ```
-  python manage.py runserver
+  python python_backend/manage.py runserver
   ```
 - You should be able to view the database at http://127.0.0.1:8000/messaging/users/.
 - You can test the database on Postman too: https://learning.postman.com/docs/designing-and-developing-your-api/testing-an-api/
-  - Use the endpoint "http://127.0.0.1:8000/messaging/users/" 
+- Use the endpoint "http://127.0.0.1:8000/messaging/users/" 
 
-### 8. Set Up JavaFX
+#### VS Code users check notes above from now on
+
+### 8. Set Up JavaFX 
 - Download the SDK (not jmods) version of JavaFX that is compatible with your computer.
 - Go to **File → Project Structure → Libraries → + → Java**.
 - Navigate to your newly downloaded JavaFX folder, path should look similar to: `javafx-sdk-23.0.1/`.
