@@ -28,7 +28,7 @@ Clone this repository to your local machine.
 - If successful, you should see a `(venv)` tag on the left of your terminal.
 
 ### 5. Install Requirements
-- Verify the presence of `requirements.txt` in the `python_backend/` directory.
+- Verify that `requirements.txt` in the `python_backend/` directory.
 - Run:
   ```
   pip install -r requirements.txt
