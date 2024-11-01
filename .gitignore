@@ -14,7 +14,8 @@ venv.bak/
 db.sqlite3
 *.log
 
-# IntelliJ IDEA
+# Java related
+*.class
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
