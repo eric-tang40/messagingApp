@@ -21,7 +21,7 @@ This app is a direct messaging application. The frontend is handled entirely by 
 
 5. Configure the Python Module
    1. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'python_backend' already exists. Click on it.
-   2. Navigate to **Dependencies**. Change the Module SDK to your new virtual environment. Ensure that your new SDK is a Python environment.
+   2. Navigate to **Dependencies**. Change the ==Module SDK== to your new virtual environment. Ensure that your new SDK is a Python environment.
       1. Click on **Edit** saving the Module SDK. Make sure that the 'Python SDK home path:' matches the path of the virtual environment in your project.
    3. Click **Apply**, then **OK**.
    4. Your Python module is set up!
