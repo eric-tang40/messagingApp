@@ -67,10 +67,11 @@ Clone this repository to your local machine.
 - Name your application `JavaFXApp`. Ensure it runs on **Local machine**.
 - For **-cp**, select **messagingApp**. For **'module not specified'**, select the module described as `SDK of 'messagingApp' module`.
 - Click on **Modify options** and select **Add VM Options**.
-  - Add the following VM options:
+  - Add the following VM options: 
     ```
     --module-path "yourpath/yourJavaFXfolder/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics
     ```
+  - Don't forget to replace "yourpath/yourJavaFXfolder/lib" with the path to your newly downloaded javaFX folder. 
 
 ### 10. Final Configuration
 - Click **Apply**, then **OK**.
