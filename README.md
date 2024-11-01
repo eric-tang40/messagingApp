@@ -6,7 +6,12 @@ This app is a direct messaging application. The frontend is handled entirely by 
 **Note:** Please make sure to copy the `.gitignore` file into your local repository. It should be on the same level as `src/` and `python_backend/`. **Ensure this file exists before pushing changes to the main repository**, as it will prevent issues when others try to pull from the main.
 
 ## Note for VS Code users
-- VS Code users would mostly follows the Setup Instructions to step 7, after than that they will need another way to run the Java GUI, step 2 will also looks different.
+- VS Code users would mostly follows the Setup Instructions to step 7, after than that they will need another way to run the Java GUI.
+- VS Code user would also won't need to do step 2 beside checking if they have Python (preferably some of the later version, we work on 3.12.x) installed or not.
+
+### What change after step 7 for VS Code user
+- Go the src/java_files, find the MainGUI.java, and either run it at the main method or just go to the Run code/ Run Java button on the top right and run the file, and a GUI will pop up.
+
 ### Add javafx .jar files to Referenced Libraries
 - Down in the bottom left of the screen, neer the setting, there is JAVA PROJECTS.
 - Press and scroll down to find Referenced Libraries, then add all of the .jar files of javafx to it.
@@ -32,6 +37,11 @@ For example:
 - Extension Pack for Java
 - JavaFX Support by Shrey Pandya
 - Language Support for Java(TM) by Red Hat
+
+### Installing python notes
+- We are using 3.12.x, which can be download at: https://www.python.org/downloads/release/python-3126.
+- Remember to add python to PATH environments variables when setting up, there is a checkbox for that at the bottom left corner when first running the installer file.
+- Go to this site to install pip the first time: https://pip.pypa.io/en/stable/installation/, remember to pick your operating system, we recommend using the ensurepip method(the first one on the site).
 
 ## Setup Instructions
 
