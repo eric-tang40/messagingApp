@@ -5,6 +5,34 @@ This app is a direct messaging application. The frontend is handled entirely by 
 
 **Note:** Please make sure to copy the `.gitignore` file into your local repository. It should be on the same level as `src/` and `python_backend/`. **Ensure this file exists before pushing changes to the main repository**, as it will prevent issues when others try to pull from the main.
 
+## Note for VS Code users
+- VS Code users would mostly follows the Setup Instructions to step 7, after than that they will need another way to run the Java GUI, step 2 will also looks different.
+### Add javafx .jar files to Referenced Libraries
+- Down in the bottom left of the screen, neer the setting, there is JAVA PROJECTS.
+- Press and scroll down to find Referenced Libraries, then add all of the .jar files of javafx to it.
+- Alternative way, press Ctrl + Shift + P, type Open Project Settings, go to Libraries and add does .jar files.
+
+### Modify launch.json
+
+Add the following line to `launch.json`, in the configurations section, between `request` and `mainClass`
+```
+"vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
+```
+For example:
+```
+{
+    "type": "java",
+    "name": "Current File",
+    "request": "launch",
+    "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
+    "mainClass": "${file}"
+},
+```
+### Install these extensions
+- Extension Pack for Java
+- JavaFX Support by Shrey Pandya
+- Language Support for Java(TM) by Red Hat
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
