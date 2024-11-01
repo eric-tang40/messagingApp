@@ -12,7 +12,7 @@ Clone this repository to your local machine.
 
 ### 2. Add a Python Module
 - Navigate to **File → Project Structure → + → New Module**. Select PYTHON, not JAVA. 
-- Title the module as you prefer. Ensure a Python interpreter is running in the base interpreter (it should look like `/usr/local/bin/python3.12`).
+- Title the module **python_backend**. Ensure a Python interpreter is running in the base interpreter (it should look like `/usr/local/bin/python3.12`).
 - Do not modify any other settings.
 - Create the module.
 
