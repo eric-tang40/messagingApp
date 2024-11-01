@@ -8,7 +8,7 @@ This app is a direct messaging application. The frontend is handled entirely by 
 1. Clone and Pull
    - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before pulling.
 
-2. Navigate to `python_backend/`
+2. Navigate to python_backend/
    - Run `cd python_backend/`
 
 3. Create a Virtual Environment
