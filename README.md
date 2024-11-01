@@ -51,6 +51,8 @@ Clone this repository to your local machine.
   python manage.py runserver
   ```
 - You should be able to view the database at [http://127.0.0.1:8000/messaging/users/](http://127.0.0.1:8000/messaging/users/).
+- You can test the database on Postman too: https://learning.postman.com/docs/designing-and-developing-your-api/testing-an-api/
+  - Use the endpoint "http://127.0.0.1:8000/messaging/users/](http://127.0.0.1:8000/messaging/users/" 
 
 ### 8. Set Up JavaFX
 - Download the SDK (not jmods) version of JavaFX that is compatible with your computer.
