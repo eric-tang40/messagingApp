@@ -61,15 +61,18 @@ For example:
 4. Activate the Virtual Environment
    1. For macOS/Linux: `source venv/bin/activate`
    2. For Windows: `venv\Scripts\activate`
+  
+5. Install Requirements
+   1. Run `pip install -r requirements.txt`
 
-5. Configure the Python Module
+7. Configure the Python Module
    1. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'python_backend' already exists. Click on it.
    2. Navigate to **Dependencies**. Change the <mark>Module SDK</mark> to your new virtual environment. Ensure that your new SDK is a Python environment.
       1. Click on **Edit** saving the Module SDK. Make sure that the <mark>Python SDK home path:</mark> matches the path of the virtual environment in your project.
    3. Click **Apply**, then **OK**.
    4. Your Python module is set up!
 
-6. Add the JavaFX library
+8. Add the JavaFX library
    1. Download the version of JavaFX that is most compatible with your computer.
    2. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'messagingApp' already exists. Click on it.
    3. Under the **Module SDK** dropdown, you should see a small **+**. Click on it. Then, select **Library...**, and add the necessary JavaFX files.
@@ -77,7 +80,7 @@ For example:
    4. Click **Apply**, then **OK**.
    5. You just imported the JavaFX libraries!
 
-7. Configure the JavaFX Application
+9. Configure the JavaFX Application
    1. Navigate to **Run -> Edit Configurations**.
    2. Click on **+**. Add an **Application**.
    3. Click on **Modify options**. Find 'Add VM options' and make sure it's toggled on.
@@ -92,7 +95,7 @@ For example:
    5. Do not modify any other fields. Click **Apply**, then **OK**.
    6. Your JavaFX Application is set up!
 
-8. Run the Program
+10. Run the Program
    1. In the top right corner, select **JavaFXApp** instead of **Current File**.
    2. Run it!
 
