@@ -1,6 +1,5 @@
 package java_files;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -10,18 +9,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class MainGUI extends Application {
+public class MainGUI extends Application implements SharedResources {
 
     private Stage primaryStage; // the GUI being displayed
 
     @Override
     public void start(Stage primaryStage) {
+        // this populates the hashmap that we use to save a local copy of a part of the database
+        manager.populateHashMap(); // do not remove this line of code from the top
+
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Main Screen");
 
@@ -77,7 +79,7 @@ public class MainGUI extends Application {
     }
 }
 
-class CreateUserGUI extends Application {
+class CreateUserGUI extends Application implements SharedResources {
 
     private Stage primaryStage; // current GUI being displayed
 
@@ -87,10 +89,6 @@ class CreateUserGUI extends Application {
     private TextField bioField = new TextField();
     private Label terminalOutputLabel = new Label();
     private StringProperty terminalOutput = new SimpleStringProperty("");
-
-    // I see no other way to do this than to make this a static variable, and thus this file the driver
-    // OR this is a static in an interface, which would work
-    private static UserManager manager = new UserManager();
 
     @Override
     public void start(Stage primaryStage) {
@@ -187,7 +185,7 @@ class CreateUserGUI extends Application {
     }
 }
 
-class LoginGUI extends Application {
+class LoginGUI extends Application implements SharedResources{
 
     private Stage primaryStage; // Current GUI being displayed
 
@@ -248,10 +246,9 @@ class LoginGUI extends Application {
     }
 
     private void handleSubmit(String username, String password) {
-        Authenticator authenticator = new Authenticator();
         if (authenticator.authenticate(username, password)) {
             printTerminalOutput("User successfully logged in.");
-            showUserProfile();
+            showUserProfile(username);
         } else {
             printTerminalOutput("Login failed. Username or password is incorrect.");
         }
@@ -266,11 +263,17 @@ class LoginGUI extends Application {
         }
     }
 
-    public void showUserProfile() {
+    public void showUserProfile(String username) {
         // would redirect to UserGUI
         // to write this GUI and on, likely need to create an interface, where idTracker is static
         // interface -> only purpose is so each GUI has access to necessary data
         // data stored is the manager and authenticator in the interface
+        UserGUI userGUI = new UserGUI(primaryStage, username);
+        try {
+            userGUI.start(primaryStage); // Reuse the primary stage
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // update the terminal (what the user sees in the GUI)
@@ -279,17 +282,113 @@ class LoginGUI extends Application {
     }
 }
 
-class UserGUI extends Application {
+class UserGUI extends Application implements SharedResources{
 
     private Stage primaryStage; // current GUI being displayed
+    private Label terminalOutputLabel = new Label();
+    private StringProperty terminalOutput = new SimpleStringProperty("");
+    private String username;
+
+    public UserGUI(Stage primaryStage, String username) {
+        this.primaryStage = primaryStage;
+        this.username = username;
+    }
 
     @Override
     public void start(Stage primaryStage) {
+        // data that is available
+        String userData = manager.getUser(this.username);
+        /*** Example Output of userData
+         * {"id":4,"username":"test2","email":"test@ourdue.edu","bio":"test","friends":{}}
+         */
+        System.out.println(userData);
+        int id = Integer.parseInt(userData.split("\"id\":")[1].split(",")[0].trim());
+        String username = userData.split("\"username\":\"")[1].split("\"")[0];
+        String email = userData.split("\"email\":\"")[1].split("\"")[0];
+        String bio = userData.split("\"bio\":\"")[1].split("\"")[0];
+        System.out.println(manager.idTrackerToString());
 
+        // initialize new Stage here
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle(username + "'s Profile");
+
+        // create a grid
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(20));
+        grid.setHgap(20); // Added horizontal spacing between elements
+        grid.setVgap(10); // Added vertical spacing between elements
+
+        // username
+        Label usernameLabel = new Label(username);
+        usernameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+        // bio
+        Label bioLabel = new Label(bio);
+        bioLabel.setStyle("-fx-font-size: 14px;");
+
+        // email
+        Label emailLabel = new Label(email);
+        emailLabel.setStyle("-fx-font-size: 14px;");
+
+        // dropdown all Users list and some buttons
+        // IDEALLY: this dropdown contains a list of ALL users. can send friend request to anyone
+        ComboBox<String> dropdownMenu = new ComboBox<>();
+        dropdownMenu.getItems().addAll("User 1", "User 2", "User 3", "See All Users");
+        dropdownMenu.setPromptText("Search for User");
+        Button sendFriendRequestButton = new Button("Send Friend Request");
+
+        // buttons
+        Button editDataButton = new Button("Edit Data");
+        Button logOutButton = new Button("Log Out");
+
+        // set actions for dropdowns
+        dropdownMenu.setOnAction(e -> {
+            if ("Reset".equals(dropdownMenu.getValue())) {
+                dropdownMenu.setValue(null); // Reset to show prompt text
+            }
+        });
+
+        // set actions for buttons
+        logOutButton.setOnAction(e -> showLogin());
+
+        // Bind the terminal output label to its output
+        terminalOutputLabel.textProperty().bind(terminalOutput);
+
+        // arrange grid
+        grid.add(usernameLabel, 0, 0);
+        grid.add(bioLabel, 0, 1);
+        grid.add(emailLabel, 0, 2);
+        grid.add(dropdownMenu, 5, 1);
+        grid.add(sendFriendRequestButton, 5, 2);
+        grid.add(editDataButton, 8, 1);
+        grid.add(logOutButton, 0, 40);
+        grid.add(new Label("Terminal Output:"), 0, 42);
+        grid.add(terminalOutputLabel, 1, 42);
+
+        // make root
+        VBox root = new VBox(grid);
+        root.setAlignment(Pos.TOP_LEFT); // Align content to the top left
+        root.setPadding(new Insets(20));
+
+        // set Stage
+        Scene scene = new Scene(root, 1000, 600); // Reduced scene height for better layout
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    public void getUserStage() {
-
+    private void showLogin() {
+        LoginGUI loginGUI = new LoginGUI();
+        try {
+            loginGUI.start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    // update the terminal (what the user sees in the GUI)
+    private void printTerminalOutput(String newValue) {
+        terminalOutput.set(newValue);
+    }
 }
+
+

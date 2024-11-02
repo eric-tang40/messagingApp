@@ -21,6 +21,75 @@ public class UserManager {
         }
     }
 
+    public String populateHashMap() {
+        try {
+            // Create an HttpClient
+            HttpClient client = HttpClient.newHttpClient();
+
+            // Create a GET request to fetch the user data from the backend
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("http://127.0.0.1:8000/messaging/users/"))
+                    .header("Content-Type", "application/json")
+                    .GET()
+                    .build();
+
+            // Send the request and get the response
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                // Parse the response body manually
+                String responseBody = response.body();
+
+                // Simple parsing logic to extract ID and Username
+                // Step 1: Remove square brackets to isolate individual user objects
+                responseBody = responseBody.substring(1, responseBody.length() - 1);
+
+                // Step 2: Split by "},{" to separate individual user objects
+                String[] userObjects = responseBody.split("\\},\\{");
+
+                // Step 3: Iterate over each user object
+                for (String userObject : userObjects) {
+                    // Clean up the object string to ensure it has no curly braces or quotes
+                    userObject = userObject.replaceAll("[{}\"]", "");
+
+                    // Split by commas to get key-value pairs
+                    String[] keyValuePairs = userObject.split(",");
+
+                    // Variables to hold the ID and username
+                    int id = -1;
+                    String username = "";
+
+                    // Extract ID and username from the key-value pairs
+                    for (String pair : keyValuePairs) {
+                        String[] keyValue = pair.split(":");
+                        if (keyValue.length == 2) {
+                            String key = keyValue[0].trim();
+                            String value = keyValue[1].trim();
+
+                            if (key.equals("id")) {
+                                id = Integer.parseInt(value);
+                            } else if (key.equals("username")) {
+                                username = value;
+                            }
+                        }
+                    }
+
+                    // Add to the HashMap if ID and username were found
+                    if (id != -1 && !username.isEmpty()) {
+                        idTracker.put(username, id);
+                    }
+                }
+
+                return "HashMap populated successfully with data from the backend.";
+            } else {
+                return "Failed to fetch data from the backend. Status code: " + response.statusCode();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "An exception occurred while populating the HashMap.";
+        }
+    }
+
     // NOTE: users cannot have the same username
     public String createUser(String username, String password, String email, String bio, HashMap<String, ArrayList<String>> friends) {
         try {
@@ -80,7 +149,7 @@ public class UserManager {
         }
     }
 
-    public void getUser(String username) {
+    public String getUser(String username) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -101,15 +170,16 @@ public class UserManager {
             HttpResponse<String> response = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("User Data: " + response.body());
+                return "User Data: " + response.body();
             } else if (response.statusCode() == 404) {
-                System.out.println("User " + username + " could not be found.");
+                return "User " + username + " could not be found.";
             } else {
-                System.out.println("Failed to retrieve user. Status code: " + response.statusCode());
+                return "Failed to retrieve user. Status code: " + response.statusCode();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     // This is a PUT/PATCH request
