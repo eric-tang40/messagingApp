@@ -1,3 +1,5 @@
+package java_files;
+
 public class UserMessage implements Message {
     private String userKey;
     private int historyMarker;

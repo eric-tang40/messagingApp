@@ -1,3 +1,5 @@
+package java_files;
+
 public interface Message {
     String getUserKey();
     int getHistoryMarker();
