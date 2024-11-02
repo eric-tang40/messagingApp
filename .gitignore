@@ -48,3 +48,11 @@ bin/
 # General
 .idea/
 *.iml
+
+# Ignore Python bytecode files
+**/__pycache__/
+**/*.pyc
+
+# Ignore SQLite database file
+db.sqlite3
+

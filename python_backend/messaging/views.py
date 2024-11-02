@@ -31,6 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
         user_data = MyUserSerializer(user).data
         return Response(user_data, status=status.HTTP_201_CREATED)
 
+
 # used for authentication
 class LoginView(APIView):
     def post(self, request):
