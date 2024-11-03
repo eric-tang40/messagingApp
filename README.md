@@ -85,7 +85,7 @@ For example:
    1. Download the version of JavaFX that is most compatible with your computer.
        - Note: Please ensure that that the JavaFX version you choose is compatible with the version of Java that is running on your project. 
    3. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'messagingApp' already exists. Click on it.
-   4. Under the **Module SDK** dropdown, you should see a small **+**. Click on it. Then, select **2. Library...**, and open the necessary JavaFX files.
+   4. Under the Module SDK dropdown menu, you should see a small **+**. Click on it. Then, select **2. Library...**, and open the necessary JavaFX files.
       1. Only add files in `lib/` that end in `.jar`. There should be 8 of these. 
       2. Your JavaFX files should be located in a directory with a similar name to `javafx-sdk-23.0.1`. Inside of that directory should be a directory named `lib/`.
    5. Before clicking **OK**, you should be brought to a window where you can name your library and set its level.
