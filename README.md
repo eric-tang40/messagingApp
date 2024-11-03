@@ -8,7 +8,7 @@ Please make sure .gitignore exists in your project's root directory before makin
 
 ## Setup Instructions
 
-Note: These setup instructions are specified for IntelliJ. VSCode-specific instructions are below, and requires a bit more work. Please do not use any other IDE to run this program. 
+**Note:** These setup instructions are specified for IntelliJ. VSCode-specific instructions are below, and requires a bit more work. Please do not use any other IDE to run this program. 
 
 1. Clone and Pull
    - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before re-cloning.
