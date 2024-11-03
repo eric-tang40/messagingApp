@@ -53,6 +53,7 @@ For example:
 
 2. Navigate to python_backend/
    - Run `cd python_backend/`
+   - Remain in this directory. ALL terminal commands in this guide are run from this directory. 
 
 3. Configure the Python Module and Create a Virtual Environment
    - Note: Do not reuse an already existing virtual environment.
