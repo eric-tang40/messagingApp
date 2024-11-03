@@ -56,7 +56,7 @@ For example:
 
 3. Configure the Python Module and Create a Virtual Environment
    - Note: Do not reuse an already existing virtual environment.
-   - Note: Do not use `python -m venv venv` to create the venv -> the setup is more involved.
+   - Note: Do not use `python -m venv venv` to create the venv.
     1. First, navigate to **File -> Project Structure -> Modules**. Verify that a module named 'python_backend' already exists. Click on it.
     2. Go to **Dependencies**. You will need to set the <mark>Module SDK</mark>. Click on it and select `Add Python SDK from disk...`.
     3. Make sure **New Environment** is selected.
