@@ -103,7 +103,8 @@ For example:
       1. **Name**: "JavaFXApp"
       2. **Run on**: Local Machine
       3. **module not specified**: java 21 SDK of 'messagingApp'
-         - Note: Your Java Program may not run "java 21". As long as the selected module is the "SDK of 'messagingApp'", it should be fine. 
+         - Note: Your Java Program may not run "java 21". As long as the selected module is the "SDK of 'messagingApp'", it should be fine.
+         - Note: If you select messagingApp as the -cp (do the next step first), it should automatically fill this field with the correct information. 
       5. **-cp <no module>**: messagingApp
       6. **VM options**: --module-path "path/to/your/javafx/lib" --add-modules javafx.controls,javafx.fxml,javafx.graphics
          - Note: replace <mark>"path/to/your/javafx/lib"</mark> with the complete path on your computer where you saved your javaFX `lib/` files.
