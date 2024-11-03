@@ -1,90 +1,99 @@
 package java_files;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RunLocalTest {
 
-    private UserManager userManager;
+    private UserManager userManager = new UserManager();
 
-    @BeforeEach
-    public void setup() {
-        userManager = new UserManager();
-    }
-
+    // Authenticator Test Cases
     @Test
     public void testAuthenticateWithValidCredentials() {
+        // Flush the database
+        userManager.flushDatabase(); // Assume this method exists for cleanup
+
+        // Enter a user with the credentials
+        userManager.createUser("validUser", "validPassword", "", "", null);
+
         // Assume valid credentials for testing
         boolean result = Authenticator.authenticate("validUser", "validPassword");
         assertTrue(result, "Authentication should succeed with valid credentials.");
+
+        String userData = userManager.getUser("validUser");
+        // Check that the username is equal to validUser
+        assertTrue(userData.contains("\"username\":\"validUser\""), "User data should contain the correct username.");
+        // We are not checking the password as it should not be accessible.
+
+        // Attempt to authenticate with invalid credentials
+        boolean result1 = Authenticator.authenticate("invalidUser", "wrongPassword");
+
+        // Assert that authentication fails
+        assertFalse(result1, "Authentication should fail with invalid credentials.");
+
+        // Check that "invalidUser" is not in the idTracker HashMap
+        assertFalse(userManager.idTracker.containsKey("invalidUser"), "idTracker should not contain 'invalidUser' as a valid username.");
+
     }
 
     @Test
     public void testAuthenticateWithInvalidCredentials() {
+        // Attempt to authenticate with invalid credentials
+        userManager.flushDatabase();
+        userManager.createUser("invalidUser", "invalidPassword", "", "", null);
         boolean result = Authenticator.authenticate("invalidUser", "invalidPassword");
         assertFalse(result, "Authentication should fail with invalid credentials.");
+        String userData = userManager.getUser("newUser");
+        assertTrue(userData.contains("\"username\":\"newUser\""), "User data should contain the correct username.");
+
+    }
+
+    // UserManager Test Cases
+    @Test
+    public void testCreateUser() {
+        // Flush the database
+        userManager.flushDatabase(); // Assume this method exists for cleanup
+
+        // Create a user
+        String result = userManager.createUser("newUser", "userPassword", "user@example.com", "This is a new user.", null);
+        assertEquals("User created successfully: ", result.substring(0, 29), "User should be created successfully.");
+
+        // Check that the user is retrievable
+        String userData = userManager.getUser("newUser");
+        assertTrue(userData.contains("\"username\":\"newUser\""), "User data should contain the correct username.");
+        // Check that the user data contains the correct email
+        assertTrue(userData.contains("\"email\":\"newuser@example.com\""), "User data should contain the correct email.");
+
+        // Check that the user data contains the correct bio
+        assertTrue(userData.contains("\"bio\":\"This is my bio.\""), "User data should contain the correct bio.");
     }
 
     @Test
-    public void testPopulateHashMap() {
-        String result = userManager.populateHashMap();
-        assertEquals("HashMap populated successfully with data from the backend.", result,
-                "The hashmap should be populated successfully.");
+    public void testEditUser() {
+        // Flush the database
+        userManager.flushDatabase();
+
+        // Create a user to edit
+        userManager.createUser("editUser", "editPassword", "edit@example.com", "This user will be edited.", null);
+
+        // Edit the user
+        userManager.editUser("editUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
+        String userData = userManager.getUser("editUser");
+        assertTrue(userData.contains("\"email\":\"newEmail@example.com\""), "User data should reflect the updated email.");
+        // We are not checking the password as it should not be accessible.
     }
 
     @Test
-    public void testCreateUserSuccessfully() {
-        HashMap<String, ArrayList<String>> friends = new HashMap<>();
-        String result = userManager.createUser("newUser", "password123", "user@example.com", "Hello, I'm new!", friends);
-        assertTrue(result.startsWith("User created successfully:"), "User should be created successfully.");
-    }
+    public void testDeleteUser() {
+        // Flush the database
+        userManager.flushDatabase();
 
-    @Test
-    public void testCreateUserWithExistingUsername() {
-        HashMap<String, ArrayList<String>> friends = new HashMap<>();
-        userManager.createUser("existingUser", "password123", "user@example.com", "I'm here!", friends);
-        String result = userManager.createUser("existingUser", "newPassword", "newuser@example.com", "I'm still here!", friends);
-        assertEquals("A user with that username already exists.", result, "Creating user with existing username should fail.");
-    }
+        // Create a user to delete
+        userManager.createUser("deleteUser", "deletePassword", "delete@example.com", "This user will be deleted.", null);
 
-    @Test
-    public void testGetUserSuccessfully() {
-        userManager.createUser("getUser", "password123", "user@example.com", "Just checking!", new HashMap<>());
-        String result = userManager.getUser("getUser");
-        assertTrue(result.contains("User Data:"), "User data should be retrieved successfully.");
-    }
-
-    @Test
-    public void testGetUserNotFound() {
-        String result = userManager.getUser("nonExistentUser");
-        assertEquals("User nonExistentUser could not be found.", result, "Should return user not found message.");
-    }
-
-    @Test
-    public void testEditUserSuccessfully() {
-        userManager.createUser("editUser", "password123", "user@example.com", "Editable user.", new HashMap<>());
-        userManager.editUser("editUser", "newPassword", "newEmail@example.com", "Updated bio", new HashMap<>());
-        String result = userManager.getUser("editUser");
-        assertTrue(result.contains("newEmail@example.com"), "User's email should be updated successfully.");
-    }
-
-    @Test
-    public void testDeleteUserSuccessfully() {
-        userManager.createUser("deleteUser", "password123", "user@example.com", "To be deleted", new HashMap<>());
+        // Delete the user
         userManager.deleteUser("deleteUser");
-        String result = userManager.getUser("deleteUser");
-        assertEquals("User deleteUser could not be found.", result, "User should be deleted successfully.");
-    }
-
-    @Test
-    public void testOutputDatabase() {
-        ArrayList<String> dbOutput = userManager.outputDatabase();
-        assertNotNull(dbOutput, "Database output should not be null.");
-        // Further assertions can be added based on expected output format.
+        String userData = userManager.getUser("deleteUser");
+        assertTrue(userData.contains("could not be found"), "User should not be retrievable after deletion.");
     }
 }

@@ -125,3 +125,8 @@ For example:
 - We are using 3.12.x, which can be download at: https://www.python.org/downloads/release/python-3126.
 - Remember to add python to PATH environments variables when setting up, there is a checkbox for that at the bottom left corner when first running the installer file.
 - Go to this site to install pip the first time: https://pip.pypa.io/en/stable/installation/, remember to pick your operating system, we recommend using the ensurepip method(the first one on the site).
+
+## JUnit setup 
+- Navigate to the RunLocalTest class.
+- Hover over the junit import statement.
+- IntelliJ will prompt you to download JUnit 5, click OK, and IntelliJ does the rest for you!

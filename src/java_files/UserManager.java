@@ -13,7 +13,7 @@ import java.util.stream.*;
 public class UserManager {
 
     // it's more useful to store username as the key, and access ID number as the value
-    private HashMap<String, Integer> idTracker;
+    HashMap<String, Integer> idTracker;
 
     public UserManager() {
         if (idTracker == null) {
@@ -146,6 +146,34 @@ public class UserManager {
         } catch (Exception e) {
             e.printStackTrace();
             return "An exception was thrown before the program could complete execution.";
+        }
+    }
+
+    public void flushDatabase() {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+
+            for (Map.Entry<String, Integer> entry : idTracker.entrySet()) {
+                Integer userId = entry.getValue();
+                URI uri = new URI("http://127.0.0.1:8000/messaging/users/" + userId + "/");
+
+                HttpRequest deleteRequest = HttpRequest.newBuilder()
+                        .uri(uri)
+                        .DELETE()
+                        .header("Content-Type", "application/json")
+                        .build();
+
+                HttpResponse<String> response = client.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() != 204) {
+                    System.out.println("Failed to delete user " + entry.getKey() + ". Status code: " + response.statusCode());
+                }
+            }
+
+            idTracker.clear();
+            System.out.println("Database flushed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
