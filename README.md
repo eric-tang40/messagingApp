@@ -70,7 +70,7 @@ For example:
     9. Before moving on, navigate to **python_backend/**. Verify that inside of the directory is a **venv/** directory. If yes, you can move on!
 
 4. Activate the Virtual Environment
-   - Make sure your terminal is in the **python_backend** directory before running this step. 
+   - Make sure your terminal is in the **python_backend** directory before running this step. `cd python_backend/`
    1. For macOS/Linux: `source venv/bin/activate`
    2. For Windows: `venv\Scripts\activate`
    3. You should see a small <mark>(venv)</mark> tag next to your terminal's command prompt. If it's there, you have successfully activated your virtual environment!
