@@ -114,7 +114,7 @@ For example:
    5. Do not modify any other fields. Click **Apply**, then **OK**.
    6. Your JavaFX Application is set up!
 
-11. Run the Program
+9. Run the Program
    1. In the top right corner, select **JavaFXApp** instead of **Current File**.
    2. Go to Terminal.
         1. Navigate to the python_backend/ directory.
