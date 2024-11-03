@@ -76,13 +76,13 @@ For example:
    2. For Windows: `venv\Scripts\activate`
    3. You should see a small <mark>(venv)</mark> tag next to your terminal's command prompt. If it's there, you have successfully activated your virtual environment!
   
-6. Install Requirements and Apply Migrations
+5. Install Requirements and Apply Migrations
    1. Run `pip install -r requirements.txt`
    2. Run `python manage.py makemigrations`
    3. Run `python manage.py migrate`
    4. You can move on after running all commands. 
 
-7. Add the JavaFX library
+6. Add the JavaFX library
    1. Download the version of JavaFX that is most compatible with your computer.
        - Note: Please ensure that that the JavaFX version you choose is compatible with the version of Java that is running on your project. 
    3. Navigate to **File -> Project Structure -> Modules**. Verify that a module named 'messagingApp' already exists. Click on it.
@@ -96,7 +96,7 @@ For example:
    6. You will be brought back to the messagingApp module. Click **Apply**, then **OK** to apply your library. 
    7. You should see a new library named `javafx-swt` inside of the messagingApp module. You just imported the JavaFX libraries!
 
-8. Configure the JavaFX Application
+7. Configure the JavaFX Application
    1. Navigate to **Run -> Edit Configurations**.
    2. Click on **+**. Add an **Application**.
    3. Click on **Modify options**. Find 'Add VM options' and make sure it's toggled on.
@@ -114,7 +114,7 @@ For example:
    5. Do not modify any other fields. Click **Apply**, then **OK**.
    6. Your JavaFX Application is set up!
 
-9. Run the Program
+8. Run the Program
    1. In the top right corner, select **JavaFXApp** instead of **Current File**.
    2. Go to Terminal.
         1. Navigate to the python_backend/ directory.
