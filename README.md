@@ -6,47 +6,9 @@ This app is a direct messaging application. The frontend is handled entirely by 
 ## IMPORTANT
 Please make sure .gitignore exists in your project's root directory before making any commits to Github. Otherwise, it will create conflicts for everyone. 
 
-## Note for VS Code users
-- VS Code users would mostly follows the Setup Instructions to step 5, after than that they will need another way to run the Java GUI, but before that
-
-### Add javafx .jar files to Referenced Libraries
-- Down in the bottom left of the screen, neer the setting, there is JAVA PROJECTS.
-- Press and scroll down to find Referenced Libraries, then add all of the .jar files of javafx to it.
-- Alternative way, press Ctrl + Shift + P, type Open Project Settings, go to Libraries and add does .jar files.
-
-### Modify launch.json
-
-Add the following line to `launch.json`, in the configurations section, between `request` and `mainClass`
-```
-"vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
-```
-For example:
-```
-{
-    "type": "java",
-    "name": "Current File",
-    "request": "launch",
-    "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
-    "mainClass": "${file}"
-},
-```
-### Install these extensions
-- Extension Pack for Java
-- JavaFX Support by Shrey Pandya
-- Language Support for Java(TM) by Red Hat
-
-
-### What change after step 5 for VS Code user
-- Go the src/java_files, find the MainGUI.java.
-- Run it at the main method.
-- Alternatively go to the Run Java button on the top right and run the file, and a GUI will pop up.
-
-## Installing python notes
-- We are using 3.12.x, which can be download at: https://www.python.org/downloads/release/python-3126.
-- Remember to add python to PATH environments variables when setting up, there is a checkbox for that at the bottom left corner when first running the installer file.
-- Go to this site to install pip the first time: https://pip.pypa.io/en/stable/installation/, remember to pick your operating system, we recommend using the ensurepip method(the first one on the site).
-
 ## Setup Instructions
+
+Note: These setup instructions are specified for IntelliJ. VSCode-specific instructions are below, and requires a bit more work. Please do not use any other IDE to run this program. 
 
 1. Clone and Pull
    - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before re-cloning.
@@ -123,3 +85,43 @@ For example:
 ---
 
 All done! 
+
+## Note for VS Code users
+- VS Code users would mostly follows the Setup Instructions to step 5, after than that they will need another way to run the Java GUI, but before that
+
+### Add javafx .jar files to Referenced Libraries
+- Down in the bottom left of the screen, neer the setting, there is JAVA PROJECTS.
+- Press and scroll down to find Referenced Libraries, then add all of the .jar files of javafx to it.
+- Alternative way, press Ctrl + Shift + P, type Open Project Settings, go to Libraries and add does .jar files.
+
+### Modify launch.json
+
+Add the following line to `launch.json`, in the configurations section, between `request` and `mainClass`
+```
+"vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
+```
+For example:
+```
+{
+    "type": "java",
+    "name": "Current File",
+    "request": "launch",
+    "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
+    "mainClass": "${file}"
+},
+```
+### Install these extensions
+- Extension Pack for Java
+- JavaFX Support by Shrey Pandya
+- Language Support for Java(TM) by Red Hat
+
+
+### What change after step 5 for VS Code user
+- Go the src/java_files, find the MainGUI.java.
+- Run it at the main method.
+- Alternatively go to the Run Java button on the top right and run the file, and a GUI will pop up.
+
+## Installing python notes
+- We are using 3.12.x, which can be download at: https://www.python.org/downloads/release/python-3126.
+- Remember to add python to PATH environments variables when setting up, there is a checkbox for that at the bottom left corner when first running the installer file.
+- Go to this site to install pip the first time: https://pip.pypa.io/en/stable/installation/, remember to pick your operating system, we recommend using the ensurepip method(the first one on the site).
