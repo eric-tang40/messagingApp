@@ -66,7 +66,7 @@ For example:
     5. For the **base interpreter**, set it equal to `/usr/local/bin/python3.12`.
         - Please use python3.12 to run this project to ensure compatibility. Do not use other, earlier versions of Python.
     6. Do not select/toggle anything else that is not explicitly mentioned above.
-    7. Click OK.
+    7. Click **Apply**, then **OK**.
     8. Your <mark>Module SDK</mark> should be named <mark>Python 3.12 (messagingApp)</mark>. If it's not, navigate to **File -> Project Structure -> SDKs**. Select your newly created SDK and rename it appropriately. 
     9. Before moving on, navigate to **python_backend/**. Verify that inside of the directory is a **venv/** directory. If yes, you can move on!
 
