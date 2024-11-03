@@ -116,7 +116,10 @@ For example:
 
 11. Run the Program
    1. In the top right corner, select **JavaFXApp** instead of **Current File**.
-   2. Run it!
+   2. Go to Terminal.
+        1. Navigate to the python_backend/ directory.
+        2. Run `python manage.py runserver`. Once you see the terminal print a URL `http://127.0.0.1:8000/`, you are ready to start. 
+   4. Run it!
 
 ---
 
