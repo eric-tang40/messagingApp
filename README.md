@@ -8,7 +8,7 @@ Please make sure .gitignore exists in your project's root directory before makin
 
 ## Setup Instructions
 
-**Note:** These setup instructions are specified for IntelliJ. VSCode-specific instructions are below, and requires a bit more work. Please do not use any other IDE to run this program. 
+**Note:** These setup instructions are specified for IntelliJ. VSCode-specific instructions are below, and requires a bit more work(or less in another person in the team's opinion). Please do not use any other IDE to run this program. 
 
 1. Clone and Pull
    - Make sure this is the first time you are cloning the repository. If you have previously cloned it, delete the instance of the repository on your local machine before re-cloning.
@@ -87,20 +87,31 @@ Please make sure .gitignore exists in your project's root directory before makin
 All done! 
 
 ## Note for VS Code users
-- VS Code users would mostly follows the Setup Instructions to step 5, after than that they will need another way to run the Java GUI, but before that
+Since VS Code doesn't have the whole **File -> Project Structure** thing, they mostly will work with the terminal. 
+### Setting up python virtual environment
+- After finish cloning, open the terminal with the project path, then start running these command line by line:
+```
+python -m venv venv
+venv\Scripts\activate
+pip install -r python_backend/requirements.txt
+python python_backend/manage.py makemigrations
+python python_backend/manage.py migrate
+python python_backend/manage.py runserver
+```
+- The first line create the virtual environment, second line activate it, third line install python packages to run properly, fourth and fifth line for migrations and sixth line to run the server.
+- That's it, the server is up.
 
 ### Add javafx .jar files to Referenced Libraries
-- Down in the bottom left of the screen, neer the setting, there is JAVA PROJECTS.
-- Press and scroll down to find Referenced Libraries, then add all of the .jar files of javafx to it.
-- Alternative way, press Ctrl + Shift + P, type Open Project Settings, go to Libraries and add does .jar files.
+- Download the version of JavaFX that is most compatible with your computer, we recommend 23.0.1, which can be downloaded here: `https://gluonhq.com/products/javafx/`, then extracted the downloaded file to some location.
+- Press Ctrl + Shift + P, type Java: Open Project Settings, go to Libraries and add all of the .jar files of javafx to it, you can find does .jar files under `javafx-sdk-23.0.1\lib`(the `javafx-sdk-23.0.1` change depends on the version of javafx you have)
 
 ### Modify launch.json
-
-Add the following line to `launch.json`, in the configurations section, between `request` and `mainClass`
+- First you may need to create the launch.json file, go to run and debug on the left, find `create a launch.json file`, press on it, then a pop up will show up in the middle top of the screen, choose java and vs code will create one for you, then start modifying it.
+- Add the following line to `launch.json`, in the configurations section, between `request` and `mainClass`
 ```
 "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.graphics",
 ```
-For example:
+- Notes, replace `C:/Program Files/Java/javafx-sdk-23.0.1/lib` with the direction to the javafx library in you machine. Example usage:
 ```
 {
     "type": "java",
@@ -115,8 +126,9 @@ For example:
 - JavaFX Support by Shrey Pandya
 - Language Support for Java(TM) by Red Hat
 
+After those step, you should be done with the set up part.
 
-### What change after step 5 for VS Code user
+### Start running the GUI
 - Go the src/java_files, find the MainGUI.java.
 - Run it at the main method.
 - Alternatively go to the Run Java button on the top right and run the file, and a GUI will pop up.
