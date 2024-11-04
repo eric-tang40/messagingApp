@@ -38,7 +38,7 @@ public class RunLocalTest {
 
     @Test
     public void testAuthenticateWithInvalidCredentials() {
-        // Attempt to authenticate with invalid credentials
+        // Authenticating invalid credentials will always return false.
         userManager.flushDatabase();
         userManager.createUser("invalidUser", "invalidPassword", "", "", null);
         boolean result = Authenticator.authenticate("invalidUser", "invalidPassword");
@@ -106,8 +106,9 @@ public class RunLocalTest {
         userManager.flushDatabase();
 
         // Attempt to edit a non-existing user
-        userManager.editUser("nonExistentUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
+        String result = userManager.editUser("nonExistentUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
         // Assuming editUser handles non-existent users internally, we would typically expect no output or a message
+        assertEquals("User nonExistentUser could not be found.", result, "Editing a non-existent user should return an error message.");
     }
 
     @Test
@@ -130,8 +131,11 @@ public class RunLocalTest {
         userManager.flushDatabase();
 
         // Attempt to delete a non-existing user
-        userManager.deleteUser("nonExistentUser");
-        // Assuming deleteUser handles non-existent users internally, we would expect no output or a message.
+        String result = userManager.deleteUser("nonExistentUser");
+
+        // Assert that the delete operation failed and returned the expected message
+        assertEquals("User nonExistentUser could not be found.", result, "Deleting a non-existent user should return an error message.");
     }
+
 }
 
