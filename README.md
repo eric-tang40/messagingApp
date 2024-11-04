@@ -3,6 +3,13 @@
 ## About
 This app is a direct messaging application. The frontend is handled entirely by JavaFX, while the backend and database operations are managed by Django. We use SQLite for our database. Our user model, `myUser`, extends the `User` class provided by `django.contrib.auth`.
 
+## Important Documentation Notes
+1. The UserManager class is the bridge between Python and Java. It contains almost all of the methods that make calls to the SQLite database and return data in a format that we can use in Java.
+2. The MainGUI class is the GUI for our home screen. It is the first GUI displayed. From that GUI, you are able to access all other GUIs in the app. The GUI has some functionality working right now, but we have not configured every button in the GUI to work yet.
+   - You should be able to create a user and login.
+3. The Authenticator class also communicates with the Python backend. It's only purpose is to authenticate the user's login and verify that they have the right username and password combination before authenticating them.
+4. RunLocalTest.java contains test methods for all methods in UserManager.java and Authenticator.java. We will incorporate the other classes such as UserMessage.java later, but they have not been included in the project yet.
+
 ## IMPORTANT
 Please make sure .gitignore exists in your project's root directory before making any commits to Github. Otherwise, it will create conflicts for everyone. 
 
