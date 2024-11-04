@@ -212,7 +212,7 @@ public class UserManager {
 
     // This is a PUT/PATCH request
     // fields that are non-empty will be updated, leave fields empty if don't want to update
-    public void editUser(String username, String password, String email, String bio, HashMap<String, ArrayList<String>> friends) {
+    public String editUser(String username, String password, String email, String bio, HashMap<String, ArrayList<String>> friends) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -279,10 +279,11 @@ public class UserManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return username;
     }
 
     // This DELETES a user PERMANENTLY using its username
-    public void deleteUser(String username) {
+    public String deleteUser(String username) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -313,6 +314,7 @@ public class UserManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return username;
     }
 
     // mainly for debugging purposes
