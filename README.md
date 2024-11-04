@@ -81,6 +81,8 @@ Please make sure .gitignore exists in your project's root directory before makin
         1. Navigate to the python_backend/ directory.
         2. Run `python manage.py runserver`. Once you see the terminal print a URL `http://127.0.0.1:8000/`, you are ready to start. 
    4. Run it!
+  
+9. There will still be errors with JUnit, since it's not imported yet. We assume that we don't need to provide instructions for this setup, and that you are able to configure JUnit to work. 
 
 ---
 
