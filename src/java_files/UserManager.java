@@ -3,8 +3,8 @@ package java_files;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.*;
 import java.util.stream.*;
@@ -13,12 +13,10 @@ import java.util.stream.*;
 public class UserManager {
 
     // it's more useful to store username as the key, and access ID number as the value
-    HashMap<String, Integer> idTracker;
+    HashMap<String, Integer> idTracker = new HashMap<>();
 
     public UserManager() {
-        if (idTracker == null) {
-            idTracker = new HashMap<>();
-        }
+        // Constructor can be empty since idTracker is already initialized
     }
 
     public String populateHashMap() {
@@ -148,33 +146,81 @@ public class UserManager {
             return "An exception was thrown before the program could complete execution.";
         }
     }
+    public String deleteUsersStartingFrom() {
+        HttpClient client = HttpClient.newHttpClient();
+        int userId = 1;
+        boolean userFound = false;
 
-    public void flushDatabase() {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-
-            for (Map.Entry<String, Integer> entry : idTracker.entrySet()) {
-                Integer userId = entry.getValue();
+        // Use a do-while loop to search for the first valid user ID
+        do {
+            try {
+                // Construct the URI for the current user ID
                 URI uri = new URI("http://127.0.0.1:8000/messaging/users/" + userId + "/");
 
+                // Build the GET request to check if the user exists
+                HttpRequest getRequest = HttpRequest.newBuilder()
+                        .uri(uri)
+                        .GET()
+                        .header("Content-Type", "application/json")
+                        .build();
+
+                // Send the GET request and handle the response
+                HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
+
+                if (getResponse.statusCode() == 200) {
+                    // User found, break the loop
+                    userFound = true;
+                } else {
+                    // Increment the user ID and continue searching
+                    userId++;
+                }
+
+                // If we've searched up to user ID 100 and found no users, throw an exception
+                if (userId > 250 && !userFound) {
+                    return "No user found";
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } while (!userFound);
+
+        // Continue with the deletion process using a while loop
+        while (true) {
+            try {
+                // Construct the URI for the current user ID
+                URI uri = new URI("http://127.0.0.1:8000/messaging/users/" + userId + "/");
+
+                // Build the DELETE request
                 HttpRequest deleteRequest = HttpRequest.newBuilder()
                         .uri(uri)
                         .DELETE()
                         .header("Content-Type", "application/json")
                         .build();
 
-                HttpResponse<String> response = client.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
+                // Send the DELETE request and handle the response
+                HttpResponse<String> deleteResponse = client.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
 
-                if (response.statusCode() != 204) {
-                    System.out.println("Failed to delete user " + entry.getKey() + ". Status code: " + response.statusCode());
+                if (deleteResponse.statusCode() == 204) {
+                    // User deleted successfully
+                   
+                } else if (deleteResponse.statusCode() == 404) {
+                    // User not found, stop the loop
+                    return "User ID " + userId + " could not be found. Stopping.";
+                } else {
+                    // Other errors
+                    return "Failed to delete user ID " + userId + ". Status code: " + deleteResponse.statusCode();
                 }
-            }
 
-            idTracker.clear();
-            System.out.println("Database flushed successfully.");
-        } catch (Exception e) {
-            e.printStackTrace();
+                // Increment the user ID for the next iteration
+                userId++;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                break; // Stop the loop if an exception occurs
+            }
         }
+        return "";
     }
 
     public String getUser(String username) {
@@ -212,7 +258,8 @@ public class UserManager {
 
     // This is a PUT/PATCH request
     // fields that are non-empty will be updated, leave fields empty if don't want to update
-    public String editUser(String username, String password, String email, String bio, HashMap<String, ArrayList<String>> friends) {
+    public String editUser(String username, String password, String email, String bio,
+            HashMap<String, ArrayList<String>> friends) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -246,7 +293,6 @@ public class UserManager {
                 jsonBuilder.append("\"friends\": ").append(friendsToJson).append(", ");
             }
 
-
             if (jsonBuilder.length() > 1) {
                 jsonBuilder.setLength(jsonBuilder.length() - 2); // Remove extra comma and space
             }
@@ -270,20 +316,21 @@ public class UserManager {
             HttpResponse<String> response = client.send(putRequest, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200 || response.statusCode() == 204) {
-                System.out.println("User updated successfully.");
+                return "User updated successfully.";
             } else if (response.statusCode() == 404) {
-                System.out.println("User " + username + " could not be found.");
+                return "User " + username + " could not be found.";
             } else {
-                System.out.println("Failed to update user. Status code: " + response.statusCode());
+                return "Failed to update user. Status code: " + response.statusCode();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return username;
+        return "";
     }
 
+
     // This DELETES a user PERMANENTLY using its username
-    public String deleteUser(String username) {
+    public void deleteUser(String username) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -314,7 +361,6 @@ public class UserManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return username;
     }
 
     // mainly for debugging purposes
@@ -326,51 +372,4 @@ public class UserManager {
         return list;
     }
 
-    // outputs the entire database
-    /**** Example output:
-     "id":1,"username":"Eric","email":"eric@example.com","bio":"I'm eric, HASHMAP
-     "id":2,"username":"George","email":"george@example.com","bio":"I'm george", HASHMAP
-     "id":3,"username":"Bob","email":"bob@example.com","bio":"I'm bob", HASHMAP
-     "id":4,"username":"Ringo","email":"ringo@example.com","bio":"I'm ringo", HASHMAP
-     */
-    // Note: The HASHMAP's output is at the end, and is different. Examples below.
-    /****
-     * "friends":{"eric":["hi","hi","good morning"],"gabriel":["goodnight","goodnight","bye"]
-     */
-    public ArrayList<String> outputDatabase() {
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-
-            // build the URI
-            URI uri = new URI("http://127.0.0.1:8000/messaging/users/");
-
-            // build GET request
-            HttpRequest getRequest = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .GET()
-                    .header("Content-Type", "application/json")
-                    .build();
-
-            // send the GET request and handle the response
-            HttpResponse<String> response = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                // various operations to modify response to produce optimal result
-                String responseContent = response.body();
-                responseContent = responseContent.substring(1, responseContent.length() - 1);
-                String[] users = responseContent.split("},\\{");
-                users[0] = users[0].substring(1, users[0].length() - 1);
-                users[users.length - 1] = users[users.length - 1].substring(0, users[users.length - 1].length() - 1);
-                list.addAll(Arrays.asList(users));
-            } else if (response.statusCode() == 404) {
-                System.out.println("Database cannot be found");
-            } else {
-                System.out.println("Failed to retrieve user. Status code: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 }
