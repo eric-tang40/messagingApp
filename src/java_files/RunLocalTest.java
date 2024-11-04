@@ -137,5 +137,39 @@ public class RunLocalTest {
         assertEquals("User nonExistentUser could not be found.", result, "Deleting a non-existent user should return an error message.");
     }
 
+    @Test
+    public void testCreateUserMessage() {
+        String message = "user-123-Hey! This is my test message";
+        UserMessage test = new UserMessage(message);
+        assertEquals(test.toString(), "user-123-Hey! This is my test message");
+    }
+
+    @Test
+    public void testUserKey() {
+        String message = "user-123-Hey! This is my test message";
+        UserMessage test = new UserMessage(message);
+        assertEquals(test.getUserKey(), "user");
+    }
+
+    @Test
+    public void testHistoryMarker() {
+        String message = "user-123-Hey! This is my test message";
+        UserMessage test = new UserMessage(message);
+        assertTrue(test.getHistoryMarker() == 123);
+    }
+
+    @Test
+    public void testContent() {
+        String message = "user-123-Hey! This is my test message";
+        UserMessage test = new UserMessage(message);
+        assertEquals(test.getContent(), "Hey! This is my test message");
+    }
+
+    @Test
+    public void testIsLiked() {
+        String message = "user-123-Hey! This is my test message";
+        UserMessage test = new UserMessage(message);
+        assertFalse(test.getIsLiked());
+    }
 }
 
