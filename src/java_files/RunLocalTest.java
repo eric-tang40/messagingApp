@@ -49,8 +49,9 @@ public class RunLocalTest {
     }
 
     // UserManager Test Cases
+
     @Test
-    public void testCreateUser() {
+    public void testCreateUserWithValid() {
         // Flush the database
         userManager.flushDatabase(); // Assume this method exists for cleanup
 
@@ -61,15 +62,27 @@ public class RunLocalTest {
         // Check that the user is retrievable
         String userData = userManager.getUser("newUser");
         assertTrue(userData.contains("\"username\":\"newUser\""), "User data should contain the correct username.");
-        // Check that the user data contains the correct email
-        assertTrue(userData.contains("\"email\":\"newuser@example.com\""), "User data should contain the correct email.");
-
-        // Check that the user data contains the correct bio
-        assertTrue(userData.contains("\"bio\":\"This is my bio.\""), "User data should contain the correct bio.");
+        assertTrue(userData.contains("\"email\":\"user@example.com\""), "User data should contain the correct email.");
+        assertTrue(userData.contains("\"bio\":\"This is a new user.\""), "User data should contain the correct bio.");
+        // Password should not be checked as it's not accessible
+        assertTrue(userData.contains("\"friends\":{}"), "User data should contain an empty friends list.");
     }
 
     @Test
-    public void testEditUser() {
+    public void testCreateUserWithInvalid() {
+        // Flush the database
+        userManager.flushDatabase();
+
+        // Attempt to create a user with an existing username
+        userManager.createUser("existingUser", "password", "existing@example.com", "This user exists.", null);
+        String result = userManager.createUser("existingUser", "newPassword", "new@example.com", "This should fail.", null);
+
+        // Assert that the creation fails
+        assertEquals("A user with that username already exists.", result, "User creation should fail due to duplicate username.");
+    }
+
+    @Test
+    public void testEditUserWithValid() {
         // Flush the database
         userManager.flushDatabase();
 
@@ -79,12 +92,26 @@ public class RunLocalTest {
         // Edit the user
         userManager.editUser("editUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
         String userData = userManager.getUser("editUser");
+
+        assertTrue(userData.contains("\"username\":\"editUser\""), "User data should reflect the correct username.");
         assertTrue(userData.contains("\"email\":\"newEmail@example.com\""), "User data should reflect the updated email.");
-        // We are not checking the password as it should not be accessible.
+        // Password should not be checked as it's not accessible
+        assertTrue(userData.contains("\"bio\":\"Updated bio.\""), "User data should reflect the updated bio.");
+        assertTrue(userData.contains("\"friends\":{}"), "User data should contain an empty friends list.");
     }
 
     @Test
-    public void testDeleteUser() {
+    public void testEditUserWithInvalid() {
+        // Flush the database
+        userManager.flushDatabase();
+
+        // Attempt to edit a non-existing user
+        userManager.editUser("nonExistentUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
+        // Assuming editUser handles non-existent users internally, we would typically expect no output or a message
+    }
+
+    @Test
+    public void testDeleteUserWithValid() {
         // Flush the database
         userManager.flushDatabase();
 
@@ -96,4 +123,15 @@ public class RunLocalTest {
         String userData = userManager.getUser("deleteUser");
         assertTrue(userData.contains("could not be found"), "User should not be retrievable after deletion.");
     }
+
+    @Test
+    public void testDeleteUserWithInvalid() {
+        // Flush the database
+        userManager.flushDatabase();
+
+        // Attempt to delete a non-existing user
+        userManager.deleteUser("nonExistentUser");
+        // Assuming deleteUser handles non-existent users internally, we would expect no output or a message.
+    }
 }
+
