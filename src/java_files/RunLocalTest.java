@@ -5,119 +5,157 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RunLocalTest implements SharedResources {
 
-    private UserManager userManager = new UserManager();
+    // no instance variables
+    // all resources you need are in sharedResources
 
     // Authenticator Test Cases
     @Test
     public void testAuthenticateWithValidCredentials() {
-        // Flush the database
-        manager.deleteUsersStartingFrom();
-        // Enter a user with the credentials
-        userManager.createUser("validUser", "validPassword", "", "", null);
+        // flush the database
+        manager.flushDatabase();
 
-        // Assume valid credentials for testing
-        boolean result = Authenticator.authenticate("validUser", "validPassword");
-        assertTrue(result, "Authentication should succeed with valid credentials.");
+        // create a user and ensure it was created successfully
+        String userContent = manager.createUser("user", "pwd", "user@example.com", "user bio", null);
+        assertTrue(userContent.contains("User created successfully"), "User was not created successfully.");
 
-        String userData = userManager.getUser("validUser");
-        // Check that the username is equal to validUser
-        assertTrue(userData.contains("\"username\":\"validUser\""), "User data should contain the correct username.");
-        // We are not checking the password as it should not be accessible.
-
-
+        // try to authenticate with valid credentials
+        boolean a = authenticator.authenticate("user", "pwd");
+        assertTrue(a, "User was successfully authenticated with an incorrect password.");
     }
 
     @Test
     public void testAuthenticateWithInvalidCredentials() {
-        // Attempt to authenticate with invalid credentials
-        manager.deleteUsersStartingFrom();
-        userManager.createUser("invalidUser", "invalidPassword", "", "", null);
-        boolean result = Authenticator.authenticate("invalidUser", "actualinvalidPassword");
-        assertFalse(result, "Authentication should fail with invalid credentials.");
-        String userData = userManager.getUser("invalidUser");
-        //assertTrue(userData.contains("\"username\":\"invalidUser\""), "User data should contain the correct username.");
+        // flush the database
+        manager.flushDatabase();
 
+        // create a user and ensure it was created successfully
+        String userContent = manager.createUser("user", "pwd", "user@example.com", "user bio", null);
+        assertTrue(userContent.contains("User created successfully"), "User was not created successfully.");
+
+        // try to authenticate with invalid credentials
+        boolean a = authenticator.authenticate("user", "wrongpwd");
+        assertFalse(a, "User was successfully authenticated with an incorrect password.");
     }
+
     // UserManager Test Cases
     @Test
     public void testCreateUser() {
-        // Flush the database
-        manager.deleteUsersStartingFrom();
+        // flush the database
+        manager.flushDatabase();
 
-        // Create a user
-        String result = userManager.createUser("newUser", "userPassword", "user@example.com", "This is a new user.", null);
-        assertEquals("User created successfully: ", result.substring(0, 27), "User should be created successfully.");
+        // create a user and ensure it was created successfully
+        String userContent = manager.createUser("user", "pwd", "user@example.com", "user bio", null);
+        assertTrue(userContent.contains("User created successfully"), "User was not created successfully.");
 
-        // Check that the user is retrievable
-        String userData = userManager.getUser("newUser");
-        assertTrue(userData.contains("\"username\":\"newUser\""), "User data should contain the correct username.");
-        // Check that the user data contains the correct email
+        // manually check that the user was made correctly
+        String userData = manager.getUser("user");
+        assertTrue(userData.contains("\"username\":\"user\""), "User data should contain the correct username.");
         assertTrue(userData.contains("\"email\":\"user@example.com\""), "User data should contain the correct email.");
+        assertTrue(userData.contains("\"bio\":\"user bio\""), "User data should contain the correct bio.");
 
-        // Check that the user data contains the correct bio
-        assertTrue(userData.contains("\"bio\":\"This is a new user.\""), "User data should contain the correct bio.");
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
 
     @Test
     public void testEditUser() {
-        // Flush the database
-        manager.deleteUsersStartingFrom();
+        // flush the database
+        manager.flushDatabase();
 
-        // Create a user to edit
-        String userCreate = userManager.createUser("editUser", "editPassword", "edit@example.com",
-                "This user will be edited.", null);
-        assertTrue(userCreate.contains("\"username\":\"editUser\""), "User was not created successfully.");
-        // Edit the user
-        userManager.editUser("editUser", "newPassword", "newEmail@example.com", "Updated bio.", null);
-        String userData = userManager.getUser("editUser");
-        assertTrue(userData.contains("\"email\":\"newEmail@example.com\""), "User data should reflect the updated email.");
-        assertTrue(userData.contains("\"bio\":\"Updated bio.\""), "User data should reflect the updated email.");
-        // We are not checking the password as it should not be accessible.
+        // create a user and ensure it was created successfully
+        String userCreate = manager.createUser("user", "pwd", "", "", null);
+        assertTrue(userCreate.contains("User created successfully"), "User was not created successfully.");
+
+        // edit the user and check for success
+        String userEdit = manager.editUser("user", "pwd", "email", "bio", null);
+        assertTrue(userEdit.contains("User updated successfully."), "User was not updated successfully.");
+
+        // double-check using manual comparisons
+        String userData = manager.getUser("user");
+        // Note: usernames cannot be changed, passwords are not saved in the database
+        assertTrue(userData.contains("\"email\":\"email\""), "User email was not updated successfully.");
+        assertTrue(userData.contains("\"bio\":\"bio\""), "User bio was not updated successfully.");
+
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
-    
+
     @Test
     public void testEditUserWithInvalidUser() {
-        // Flush the database
-        manager.deleteUsersStartingFrom();
+        // flush the database
+        manager.flushDatabase();
 
-        // Create a user to edit
-        String userCreate = userManager.createUser("editUser2", "editPassword", "", "", null);
-        assertTrue(userCreate.contains("\"username\":\"editUser2\""), "User was not created successfully.");
-        String a = userManager.editUser("111111", "newPassword", "newEmail@example.com", "Updated bio.", null);
+        // create a user
+        String userCreate = manager.createUser("user", "pwd", "", "", null);
+        assertTrue(userCreate.contains("User created successfully"), "User was not created successfully.");
+
+        // try to edit a user that doesn't exist
+        String a = manager.editUser("nonExistentUser", "pwd", "email@example.com", "bio", null);
         assertTrue(a.contains("could not be found"), "User should not be found.");
+
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
 
     @Test
     public void testDeleteUser() {
-        manager.deleteUsersStartingFrom();
+        // flush the database
+        manager.flushDatabase();
 
-        // Create a user to delete
-        userManager.createUser("deleteUser", "deletePassword", "delete@example.com", "This user will be deleted.",
-                null);
+        // create a user to delete
+        String userContent = manager.createUser("user", "pwd", "", "", null);
+        assertTrue(userContent.contains("User created successfully"), "User was not created successfully.");
 
-        // Delete the user
-        userManager.deleteUser("deleteUser");
-        String userData = userManager.getUser("deleteUser");
+        // delete the user
+        manager.deleteUser("user");
+
+        // try to get the user. ensure the user cannot be found
+        String userData = manager.getUser("user");
         assertTrue(userData.contains("could not be found"), "User should not be retrievable after deletion.");
+
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
 
     @Test
     public void testGetUser() {
-        // Flush the database
-        manager.deleteUsersStartingFrom();
+        // flush the database
+        manager.flushDatabase();
 
-        // Create a user to retrieve
-        String userContent = userManager.createUser("getUser", "getUserPassword", "1", "2", null);
-        assertTrue(userContent.contains("User created successfully"), "User data should contain the correct username.");
-        String userData = userManager.getUser("getUser");
-        assertTrue(userData.contains("\"username\":\"getUser\""), "User data should contain the correct password.");
+        // create a user to retrieve
+        String userContent = manager.createUser("getUser", "getUserPassword", "1", "2", null);
+
+        // ensure user was created
+        assertTrue(userContent.contains("User created successfully"), "User was not created successfully.");
+
+        // ensure getUser() returns the proper data
+        String userData = manager.getUser("getUser");
+        assertTrue(userData.contains("\"username\":\"getUser\""), "User data should contain the correct username.");
         assertTrue(userData.contains("\"email\":\"1\""), "User data should contain the correct email.");
         assertTrue(userData.contains("\"bio\":\"2\""), "User data should contain the correct bio.");
+
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
 
     @Test
-    public void testDeleteAll() {
-        String a = manager.deleteUsersStartingFrom();
-        assertTrue(a.contains("Stopping"), "No users should be found.");
+    public void testFlushDatabase() {
+        // flush the database
+        manager.flushDatabase();
+
+        // creating new users and ensure they were successfully created
+        String user1content = manager.createUser("Eric", "pwd", "", "", null);
+        String user2content = manager.createUser("George", "pwd", "", "", null);
+        String user3content = manager.createUser("Bob", "pwd", "", "", null);
+        assertTrue(user1content.contains("User created successfully"), "User was not created successfully.");
+        assertTrue(user2content.contains("User created successfully"), "User was not created successfully.");
+        assertTrue(user3content.contains("User created successfully"), "User was not created successfully.");
+
+        // flush the database again, this time truly testing its functionality
+        boolean flushed = manager.flushDatabase();
+        assertTrue(flushed, "No users should be found.");
+
+        // flush the database at the end to reset
+        manager.flushDatabase();
     }
 }

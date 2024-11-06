@@ -23,6 +23,12 @@ public class MainGUI extends Application implements SharedResources {
     public void start(Stage primaryStage) {
         // this populates the hashmap that we use to save a local copy of a part of the database
         manager.populateHashMap(); // do not remove this line of code from the top
+        boolean huh = manager.writeHashMapToFile(); // do not remove this line of code from the top
+        System.out.println(huh);
+
+        String a = manager.editUser("user", "pwd", "ko", "bio", null);
+        System.out.println(a);
+
 
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Main Screen");

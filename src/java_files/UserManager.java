@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.*;
 import java.util.stream.*;
+import java.io.*;
 
 // NOTE: ONLY MAKE ONE UserManager OBJECT IN THE PROGRAM
 public class UserManager {
@@ -135,6 +136,7 @@ public class UserManager {
                 String idString = responseContent.substring(responseContent.indexOf("\"id\":") + 5, responseContent.indexOf(",", responseContent.indexOf("\"id\":"))).trim();
                 int userId = Integer.parseInt(idString);
                 idTracker.put(username, userId); // add it to the HashMap
+                writeHashMapToFile(); // write new hashmap to file
                 return "User created successfully: " + response.body();
             } else if (response.statusCode() == 200) {
                 return "A user with that username already exists.";
@@ -146,81 +148,45 @@ public class UserManager {
             return "An exception was thrown before the program could complete execution.";
         }
     }
-    public String deleteUsersStartingFrom() {
-        HttpClient client = HttpClient.newHttpClient();
-        int userId = 1;
-        boolean userFound = false;
 
-        // Use a do-while loop to search for the first valid user ID
-        do {
-            try {
-                // Construct the URI for the current user ID
-                URI uri = new URI("http://127.0.0.1:8000/messaging/users/" + userId + "/");
+    public boolean flushDatabase() {
+        try (BufferedReader bfr = new BufferedReader(new FileReader("localDatabase.txt"))) {
+            HttpClient client = HttpClient.newHttpClient();
 
-                // Build the GET request to check if the user exists
-                HttpRequest getRequest = HttpRequest.newBuilder()
-                        .uri(uri)
-                        .GET()
-                        .header("Content-Type", "application/json")
-                        .build();
-
-                // Send the GET request and handle the response
-                HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
-
-                if (getResponse.statusCode() == 200) {
-                    // User found, break the loop
-                    userFound = true;
-                } else {
-                    // Increment the user ID and continue searching
-                    userId++;
+            while (true) {
+                String line = bfr.readLine();
+                if (line == null) {
+                    break;
                 }
 
-                // If we've searched up to user ID 100 and found no users, throw an exception
-                if (userId > 250 && !userFound) {
-                    return "No user found";
-                }
+                String[] keyValuePair = line.split(": ");
+                if (keyValuePair.length != 2) {
+                    continue;
+                } // if for any reason, there is no key, no value, or both, just ignore it
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } while (!userFound);
-
-        // Continue with the deletion process using a while loop
-        while (true) {
-            try {
-                // Construct the URI for the current user ID
+                String userId = keyValuePair[1].trim(); // trim() in case of weird white spaces
                 URI uri = new URI("http://127.0.0.1:8000/messaging/users/" + userId + "/");
+                System.out.println(uri.toString());
 
-                // Build the DELETE request
                 HttpRequest deleteRequest = HttpRequest.newBuilder()
                         .uri(uri)
                         .DELETE()
                         .header("Content-Type", "application/json")
                         .build();
 
-                // Send the DELETE request and handle the response
                 HttpResponse<String> deleteResponse = client.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
 
-                if (deleteResponse.statusCode() == 204) {
-                    // User deleted successfully
-                   
-                } else if (deleteResponse.statusCode() == 404) {
-                    // User not found, stop the loop
-                    return "User ID " + userId + " could not be found. Stopping.";
-                } else {
-                    // Other errors
-                    return "Failed to delete user ID " + userId + ". Status code: " + deleteResponse.statusCode();
+                // all cases where deletion was unsuccessful, just return false
+                if (deleteResponse.statusCode() != 204 && deleteResponse.statusCode() != 404) {
+                    return false;
                 }
-
-                // Increment the user ID for the next iteration
-                userId++;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                break; // Stop the loop if an exception occurs
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        return "";
+        setIdTracker(new HashMap<String, Integer>()); // also clear idTracker, since the database is empty
+        return true; // all users have been deleted, database is now empty
     }
 
     public String getUser(String username) {
@@ -258,6 +224,7 @@ public class UserManager {
 
     // This is a PUT/PATCH request
     // fields that are non-empty will be updated, leave fields empty if don't want to update
+    // NOTE: MUST ENTER CORRECT USERNAME AND PASSWORD TO BE ALLOWED
     public String editUser(String username, String password, String email, String bio,
             HashMap<String, ArrayList<String>> friends) {
         try {
@@ -330,7 +297,7 @@ public class UserManager {
 
 
     // This DELETES a user PERMANENTLY using its username
-    public void deleteUser(String username) {
+    public String deleteUser(String username) {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -352,14 +319,14 @@ public class UserManager {
 
             if (deleteResponse.statusCode() == 204) {
                 idTracker.remove(username); // delete it from the HashMap too
-                System.out.println("User " + username + " successfully deleted.");
+                return "User " + username + " successfully deleted.";
             } else if (deleteResponse.statusCode() == 404) {
-                System.out.println("User " + username + " could not be found.");
+                return "User " + username + " could not be found.";
             } else {
-                System.out.println("Failed to delete user. Status code: " + deleteResponse.statusCode());
+                return "Failed to delete user. Status code: " + deleteResponse.statusCode();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return "";
         }
     }
 
@@ -370,6 +337,33 @@ public class UserManager {
             list.add(entry.getKey() + ": " + entry.getValue());
         }
         return list;
+    }
+
+    // this saves our HashMap, idTracker, to a local .txt file
+    // for persistence purposes
+
+    /*** RUN THIS COMMAND BEFORE EXITING THE PROGRAM ALWAYS ALWAYS ALWAYS ALWAYS
+     *   ENSURE THAT IT RETURNS TRUE BEFORE EXITING
+     */
+    public boolean writeHashMapToFile() {
+        // note, trying to write an empty/null hashmap returns false
+        if (idTracker == null || idTracker.isEmpty()) {
+            return false;
+        }
+        try (PrintWriter writer = new PrintWriter(new FileWriter("localDatabase.txt"))) {
+            for (Map.Entry<String, Integer> entry : idTracker.entrySet()) {
+                // store pairs like this --> Key: Value
+                writer.println(entry.getKey() + ": " + entry.getValue());
+            }
+            return true;
+        } catch (IOException e) {
+            // should not be an issue, return false on all exceptions
+            return false;
+        }
+    }
+
+    public void setIdTracker(HashMap<String, Integer> idTracker) {
+        this.idTracker = idTracker;
     }
 
 }

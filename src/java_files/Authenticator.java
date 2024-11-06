@@ -6,7 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class Authenticator {
-    public static boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password) {
         try {
             // this is our API's authentication url
             URL url = new URL("http://127.0.0.1:8000/messaging/api/login/");
