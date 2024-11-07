@@ -33,13 +33,3 @@ class MyUserSerializer(serializers.ModelSerializer):
         return user
 
 
-""" This is an example of what "serialized" data looks like
-{
-    "id": 4,
-    "username": "Ringo",
-    "password": "test4",
-    "email": "ringo@example.com",
-    "bio": "I'm ringo"
-}
-"""
-

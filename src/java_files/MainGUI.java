@@ -14,6 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.*;
+import java.io.*;
 
 public class MainGUI extends Application implements SharedResources {
 
@@ -24,21 +26,16 @@ public class MainGUI extends Application implements SharedResources {
         // this populates the hashmap that we use to save a local copy of a part of the database
         manager.populateHashMap(); // do not remove this line of code from the top
         boolean huh = manager.writeHashMapToFile(); // do not remove this line of code from the top
-        System.out.println(huh);
-
-        String a = manager.editUser("user", "pwd", "ko", "bio", null);
-        System.out.println(a);
-
 
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Main Screen");
 
         // create grid
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setAlignment(Pos.CENTER);
+        GridPane mainGrid = new GridPane();
+        mainGrid.setPadding(new Insets(10));
+        mainGrid.setHgap(10);
+        mainGrid.setVgap(10);
+        mainGrid.setAlignment(Pos.CENTER);
 
         // buttons
         Button createUserButton = new Button("Create User");
@@ -48,11 +45,11 @@ public class MainGUI extends Application implements SharedResources {
         createUserButton.setOnAction(e -> showCreateUser());
         loginButton.setOnAction(e -> showLogin());
 
-        grid.add(createUserButton, 0, 0);
-        grid.add(loginButton, 1, 0);
+        mainGrid.add(createUserButton, 0, 0);
+        mainGrid.add(loginButton, 1, 0);
 
         // more setup
-        VBox root = new VBox(grid);
+        VBox root = new VBox(mainGrid);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
 
@@ -102,24 +99,24 @@ class CreateUserGUI extends Application implements SharedResources {
         primaryStage.setTitle("Create User");
 
         // create grid
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setAlignment(Pos.CENTER);
+        GridPane createUserGrid = new GridPane();
+        createUserGrid.setPadding(new Insets(10));
+        createUserGrid.setHgap(10);
+        createUserGrid.setVgap(10);
+        createUserGrid.setAlignment(Pos.CENTER);
 
         // add labels and text fields
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(usernameField, 1, 0);
+        createUserGrid.add(new Label("Username:"), 0, 0);
+        createUserGrid.add(usernameField, 1, 0);
 
-        grid.add(new Label("Password:"), 0, 1);
-        grid.add(passwordField, 1, 1);
+        createUserGrid.add(new Label("Password:"), 0, 1);
+        createUserGrid.add(passwordField, 1, 1);
 
-        grid.add(new Label("Email:"), 0, 2);
-        grid.add(emailField, 1, 2);
+        createUserGrid.add(new Label("Email:"), 0, 2);
+        createUserGrid.add(emailField, 1, 2);
 
-        grid.add(new Label("Bio:"), 0, 3);
-        grid.add(bioField, 1, 3);
+        createUserGrid.add(new Label("Bio:"), 0, 3);
+        createUserGrid.add(bioField, 1, 3);
 
         // bind the terminal output label to its output
         terminalOutputLabel.textProperty().bind(terminalOutput);
@@ -140,15 +137,15 @@ class CreateUserGUI extends Application implements SharedResources {
         clearButton.setOnAction(e -> handleClear());
         backButton.setOnAction(e -> showMain());
 
-        grid.add(submitButton, 0, 5);
-        grid.add(clearButton, 1, 5);
-        grid.add(backButton, 2, 5);
+        createUserGrid.add(submitButton, 0, 5);
+        createUserGrid.add(clearButton, 1, 5);
+        createUserGrid.add(backButton, 2, 5);
 
         // adds terminal output to the bottom
-        grid.add(new Label("Terminal Output:"), 0, 7);
-        grid.add(terminalOutputLabel, 1, 7);
+        createUserGrid.add(new Label("Terminal Output:"), 0, 7);
+        createUserGrid.add(terminalOutputLabel, 1, 7);
 
-        VBox root = new VBox(grid);
+        VBox root = new VBox(createUserGrid);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
 
@@ -206,18 +203,18 @@ class LoginGUI extends Application implements SharedResources{
         primaryStage.setTitle("Login");
 
         // create grid
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setAlignment(Pos.CENTER);
+        GridPane loginGrid = new GridPane();
+        loginGrid.setPadding(new Insets(10));
+        loginGrid.setHgap(10);
+        loginGrid.setVgap(10);
+        loginGrid.setAlignment(Pos.CENTER);
 
         // add labels
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(usernameField, 1, 0);
+        loginGrid.add(new Label("Username:"), 0, 0);
+        loginGrid.add(usernameField, 1, 0);
 
-        grid.add(new Label("Password:"), 0, 1);
-        grid.add(passwordField, 1, 1);
+        loginGrid.add(new Label("Password:"), 0, 1);
+        loginGrid.add(passwordField, 1, 1);
 
         // Bind the terminal output label to its output
         terminalOutputLabel.textProperty().bind(terminalOutput);
@@ -234,15 +231,15 @@ class LoginGUI extends Application implements SharedResources{
         backButton.setOnAction(e -> showMain());
 
         // Add buttons to the grid
-        grid.add(submitButton, 0, 2);
-        grid.add(backButton, 1, 2);
+        loginGrid.add(submitButton, 0, 2);
+        loginGrid.add(backButton, 1, 2);
 
         // adds terminal output to the bottom
-        grid.add(new Label("Terminal Output:"), 0, 7);
-        grid.add(terminalOutputLabel, 1, 7);
+        loginGrid.add(new Label("Terminal Output:"), 0, 7);
+        loginGrid.add(terminalOutputLabel, 1, 7);
 
         // more setup
-        VBox root = new VBox(grid);
+        VBox root = new VBox(loginGrid);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20));
 
@@ -288,7 +285,7 @@ class LoginGUI extends Application implements SharedResources{
     }
 }
 
-class UserGUI extends Application implements SharedResources{
+class UserGUI extends Application implements SharedResources {
 
     private Stage primaryStage; // current GUI being displayed
     private Label terminalOutputLabel = new Label();
@@ -307,85 +304,243 @@ class UserGUI extends Application implements SharedResources{
         /*** Example Output of userData
          * {"id":4,"username":"test2","email":"test@ourdue.edu","bio":"test","friends":{}}
          */
-        System.out.println(userData);
         int id = Integer.parseInt(userData.split("\"id\":")[1].split(",")[0].trim());
         String username = userData.split("\"username\":\"")[1].split("\"")[0];
         String email = userData.split("\"email\":\"")[1].split("\"")[0];
         String bio = userData.split("\"bio\":\"")[1].split("\"")[0];
-        System.out.println(manager.idTrackerToString());
 
         // initialize new Stage here
         this.primaryStage = primaryStage;
         primaryStage.setTitle(username + "'s Profile");
 
-        // create a grid
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(20));
-        grid.setHgap(20); // Added horizontal spacing between elements
-        grid.setVgap(10); // Added vertical spacing between elements
+        // Create a single grid for both profile and messages
+        GridPane userGrid = new GridPane();
+        userGrid.setPadding(new Insets(10));
+        userGrid.setHgap(20);
+        userGrid.setVgap(10);
 
-        // username
+        // Profile info section (left side)
         Label usernameLabel = new Label(username);
         usernameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-
-        // bio
         Label bioLabel = new Label(bio);
         bioLabel.setStyle("-fx-font-size: 14px;");
-
-        // email
         Label emailLabel = new Label(email);
         emailLabel.setStyle("-fx-font-size: 14px;");
 
-        // dropdown all Users list and some buttons
-        // IDEALLY: this dropdown contains a list of ALL users. can send friend request to anyone
         ComboBox<String> dropdownMenu = new ComboBox<>();
-        dropdownMenu.getItems().addAll("User 1", "User 2", "User 3", "See All Users");
+        for (String key: manager.getIdTracker().keySet()) {
+            if (key.equals(username)) continue;
+            dropdownMenu.getItems().add(key);
+        }
+        dropdownMenu.getItems().add("See All Users");
         dropdownMenu.setPromptText("Search for User");
-        Button sendFriendRequestButton = new Button("Send Friend Request");
 
-        // buttons
+        Button sendFriendRequestButton = new Button("Send Friend Request");
         Button editDataButton = new Button("Edit Data");
         Button logOutButton = new Button("Log Out");
 
-        // set actions for dropdowns
-        dropdownMenu.setOnAction(e -> {
-            if ("Reset".equals(dropdownMenu.getValue())) {
-                dropdownMenu.setValue(null); // Reset to show prompt text
-            }
-        });
-
-        // set actions for buttons
+        // button actions here
+        editDataButton.setOnAction(e -> showEdit());
         logOutButton.setOnAction(e -> showLogin());
-
-        // Bind the terminal output label to its output
         terminalOutputLabel.textProperty().bind(terminalOutput);
 
-        // arrange grid
-        grid.add(usernameLabel, 0, 0);
-        grid.add(bioLabel, 0, 1);
-        grid.add(emailLabel, 0, 2);
-        grid.add(dropdownMenu, 5, 1);
-        grid.add(sendFriendRequestButton, 5, 2);
-        grid.add(editDataButton, 8, 1);
-        grid.add(logOutButton, 0, 40);
-        grid.add(new Label("Terminal Output:"), 0, 42);
-        grid.add(terminalOutputLabel, 1, 42);
+        // add profile info
+        userGrid.add(usernameLabel, 0, 0);
+        userGrid.add(bioLabel, 0, 1);
+        userGrid.add(dropdownMenu, 0, 2);
+        userGrid.add(sendFriendRequestButton, 0, 3);
+        userGrid.add(editDataButton, 1, 2);
 
-        // make root
-        VBox root = new VBox(grid);
-        root.setAlignment(Pos.TOP_LEFT); // Align content to the top left
+        // RIGHT SIDE OF SCREEN FOR MESSAGES
+        HashMap<String, Integer> friendsMap = manager.getIdTracker();
+
+        // new grid
+        GridPane grid2 = new GridPane();
+        grid2.setPadding(new Insets(10));
+        grid2.setHgap(10);
+        grid2.setVgap(10);
+
+        int messageRow = 0;
+
+        for (Map.Entry<String, Integer> entry : friendsMap.entrySet()) {
+            String otherUser = entry.getKey();
+            if (username.equals(otherUser)) continue;
+
+            List<String> messages = List.of("Hello there!");
+
+            VBox messageBox = new VBox();
+            messageBox.setPadding(new Insets(15));
+            messageBox.setSpacing(20);
+            messageBox.setStyle("-fx-background-color: #f0f0f0; -fx-border-radius: 10; -fx-background-radius: 10; -fx-min-width: 300px;");
+
+            Label userLabel = new Label(otherUser);
+            userLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+            Label latestMessage = new Label(messages.get(messages.size() - 1));
+            latestMessage.setStyle("-fx-font-size: 14px; -fx-text-fill: #555555;");
+
+            messageBox.getChildren().addAll(userLabel, latestMessage);
+            grid2.add(messageBox, 0, messageRow);
+            messageRow++;
+            if (messageRow >= 6) { // don't display more than 6 at once
+                break;
+            }
+        }
+
+        messageRow += 1; // numRows between message and logout
+
+        grid2.add(logOutButton, 0, messageRow + 1);
+        grid2.add(new Label("Terminal Output:"), 0, messageRow + 2);
+        grid2.add(terminalOutputLabel, 1, messageRow + 2);
+
+        // put the grid in a vbox
+        VBox root = new VBox();
         root.setPadding(new Insets(20));
 
-        // set Stage
-        Scene scene = new Scene(root, 1000, 600); // Reduced scene height for better layout
+        userGrid.prefHeightProperty().bind(root.heightProperty().multiply(0.35));
+        grid2.prefHeightProperty().bind(root.heightProperty().multiply(0.65));
+        root.getChildren().addAll(userGrid, grid2);
+
+        // set the Stage
+        Scene scene = new Scene(root, 550, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
     private void showLogin() {
         LoginGUI loginGUI = new LoginGUI();
         try {
             loginGUI.start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showEdit() {
+        EditGUI editGUI = new EditGUI(username);
+        try {
+            editGUI.start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // update the terminal (what the user sees in the GUI)
+    private void printTerminalOutput(String newValue) {
+        terminalOutput.set(newValue);
+    }
+}
+
+class EditGUI extends Application implements SharedResources {
+
+    private Stage primaryStage; // current GUI being displayed
+    private Label terminalOutputLabel = new Label();
+    private StringProperty terminalOutput = new SimpleStringProperty("");
+    private String user;
+
+    public EditGUI(String user) {
+        this.user = user;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle("Edit Profile");
+
+        // create grid
+        GridPane editGrid = new GridPane();
+        editGrid.setPadding(new Insets(10));
+        editGrid.setHgap(10);
+        editGrid.setVgap(10);
+        editGrid.setAlignment(Pos.CENTER);
+
+        // edit username
+        editGrid.add(new Label("Edit Username:"), 0, 0);
+        TextField username = new TextField();
+        editGrid.add(username, 1, 0);
+
+        // edit email
+        editGrid.add(new Label("Edit Email:"), 0, 2);
+        TextField email = new TextField();
+        editGrid.add(email, 1, 2);
+
+        // edit bio
+        editGrid.add(new Label("Edit Bio:"), 0, 3);
+        TextField bio = new TextField();
+        editGrid.add(bio, 1, 3);
+
+        // terminal output
+        editGrid.add(new Label("Terminal Output:"), 0, 7);
+        editGrid.add(terminalOutputLabel, 0, 8);
+
+        // bind the terminal output label to its output
+        terminalOutputLabel.textProperty().bind(terminalOutput);
+
+        // create buttons
+        Button saveButton = new Button("Save Changes");
+        Button backButton = new Button("Back");
+
+        // get username
+
+        // eet up button actions
+        backButton.setOnAction(e -> showUser(user));
+        saveButton.setOnAction(e -> {
+            // get text fom user and trim
+            String newUsername = username.getText().trim();
+            String newEmail = email.getText().trim();
+            String newBio = bio.getText().trim();
+
+            // validation of fields
+            while (true) {
+                if (newUsername.isEmpty()) {
+                    terminalOutput.set("Username cannot be empty. Please provide a valid username.");
+                    break;
+                } else if (newEmail.isEmpty()) {
+                    terminalOutput.set("Email cannot be empty. Please provide a valid email address.");
+                    break; // Exit the loop since validation failed
+                } else if (newBio.isEmpty()) {
+                    terminalOutput.set("Bio cannot be empty. Please provide some information in your bio.");
+                    break;
+                } else {
+                    username.setText(newUsername);
+                    email.setText(newEmail);
+                    bio.setText(newBio);
+                    terminalOutput.set("Profile updated successfully!");
+
+                    // print to the console for debugging
+                    // here, i will send the PUT/PATCH request
+                    System.out.println("Updated Username: " + newUsername);
+                    System.out.println("Updated Email: " + newEmail);
+                    System.out.println("Updated Bio: " + newBio);
+                    showUser(newUsername);
+
+                    break;
+                }
+            }
+        });
+
+        terminalOutputLabel.textProperty().bind(terminalOutput);
+
+        // Add buttons to the grid
+        editGrid.add(saveButton, 0, 4);
+        editGrid.add(backButton, 1, 4);
+
+        // More setup - using a VBox as the root container
+        VBox root = new VBox(editGrid);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(20));
+
+        // Create a scene with the VBox
+        Scene scene = new Scene(root, 1000, 1000);
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
+    }
+
+    private void showUser(String username) {
+        UserGUI userGUI = new UserGUI(primaryStage, username);
+        try {
+            userGUI.start(primaryStage);
         } catch (Exception e) {
             e.printStackTrace();
         }

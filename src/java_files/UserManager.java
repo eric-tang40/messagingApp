@@ -366,4 +366,8 @@ public class UserManager {
         this.idTracker = idTracker;
     }
 
+    public HashMap<String, Integer> getIdTracker() {
+        return idTracker;
+    }
+
 }
