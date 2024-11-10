@@ -340,6 +340,7 @@ class UserGUI extends Application implements SharedResources {
         Button logOutButton = new Button("Log Out");
 
         // button actions here
+        sendFriendRequestButton.setOnAction(e -> test());
         editDataButton.setOnAction(e -> showEdit());
         logOutButton.setOnAction(e -> showLogin());
         terminalOutputLabel.textProperty().bind(terminalOutput);
@@ -407,6 +408,10 @@ class UserGUI extends Application implements SharedResources {
         primaryStage.show();
     }
 
+    private void test() {
+        MessageManager messageManager = new MessageManager(username, "bob");
+        messageManager.sendMessage("eric", "1234", "test");
+    }
 
     private void showLogin() {
         LoginGUI loginGUI = new LoginGUI();

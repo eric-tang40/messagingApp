@@ -14,6 +14,7 @@ import java.io.*;
 public class UserManager {
 
     // it's more useful to store username as the key, and access ID number as the value
+    // may change to private variable
     HashMap<String, Integer> idTracker = new HashMap<>();
 
     public UserManager() {
