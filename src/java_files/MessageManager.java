@@ -22,7 +22,7 @@ public class MessageManager extends UserManager implements SharedResources {
     // how to deal with user typing input that is reserved, like commmas
     // we need to add functionality to tell the program to escape it
     // NOTE: need username and password
-    public String sendMessage(String sender, String password, String message) {
+    public String sendMessage(String sender, String message) {
         // first, check that both usernames exist in idTracker
         if (!(manager.idTracker.containsKey(username1))) {
             return "User " + username1 + " could not be found in the database";
@@ -38,8 +38,8 @@ public class MessageManager extends UserManager implements SharedResources {
             Integer receiverId = manager.idTracker.get(receiver);
 
             // construct URI for get request to database
-            System.out.println(sendMessageForUser(userId, sender, password, receiver, message, "sent"));
-            System.out.println(sendMessageForUser(receiverId, receiver, password, sender, message, "received"));
+            System.out.println(sendMessageForUser(userId, sender, receiver, message, "sent"));
+            System.out.println(sendMessageForUser(receiverId, receiver, sender, message, "received"));
         } catch (Exception e) {
             e.printStackTrace();
             return "An error occurred while sending the message.";
@@ -47,7 +47,7 @@ public class MessageManager extends UserManager implements SharedResources {
         return "";
     }
 
-    public String sendMessageForUser(Integer userId, String sender, String password, String receiver, String message, String sent) {
+    public String sendMessageForUser(Integer userId, String sender, String receiver, String message, String sent) {
         // add info to message before storing it
         message += sent.equals("sent") ? "-1" : "-2";
         System.out.println(message);
@@ -99,7 +99,6 @@ public class MessageManager extends UserManager implements SharedResources {
             jsonBuilder.append("{");
 
             jsonBuilder.append("\"username\": \"").append(sender).append("\", ");
-            jsonBuilder.append("\"password\": \"").append(password).append("\", ");
 
             jsonBuilder.append("\"friends\": {");
 
@@ -133,7 +132,7 @@ public class MessageManager extends UserManager implements SharedResources {
             HttpRequest putRequest = HttpRequest.newBuilder()
                     .uri(uri)
                     .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
             // send put request
