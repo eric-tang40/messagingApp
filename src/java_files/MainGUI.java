@@ -68,7 +68,7 @@ public class MainGUI extends Application implements SharedResources {
         }
     }
 
-    private void showLogin() {
+    public void showLogin() {
         LoginGUI loginGUI = new LoginGUI();
         try {
             loginGUI.start(primaryStage);
